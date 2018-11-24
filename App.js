@@ -12,77 +12,58 @@ export default class CameraExample extends React.Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   }
+takePicture() {
+    this.setState({
+        takeImageText: "... PROCESSING PICTURE ..."
+    });
+    this.camera.takePictureAsync({ skipProcessing: true }).then((data) => {
+        this.setState({
+            takeImageText: "PICTURE TAKEN",
+            photo: data.uri
+        }, console.log(data.uri))
+    })
+}
+
 
   render() {
     const { hasCameraPermission } = this.state;
     if (hasCameraPermission === null) {
       return <View />;
-    } else if (hasCameraPermission === false) {
+    } 
+    else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
-    } else {
-      return (
-        <View style={{ flex: 1 }}>
-          <Camera style={{ flex: 1 }} type={this.state.type}>
-        
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: 'transparent',
-                flexDirection: 'row',
-              }}>
-              <TouchableOpacity
-                style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  this.setState({
-                    type: this.state.type === Camera.Constants.Type.back
-                      ? Camera.Constants.Type.front
-                      : Camera.Constants.Type.back,
-                  });
-                }}>
-                <Text
-                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                  {' '}Flip{' '}
-                </Text>
-              </TouchableOpacity>
-   <TouchableOpacity
-                style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  takePicture = () => {
-                    if (this.camera) {
-                      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
-                    }
-                  };
-                
-                  handleMountError = ({ message }) => console.error(message);
-                
-                  onPictureSaved = async photo => {
-                    await FileSystem.moveAsync({
-                      from: photo.uri,
-                      to: `${FileSystem.documentDirectory}photos/${Date.now()}.jpg`,
-                    });
-                    this.setState({ newPhotos: true });
-                  }
-
-                }}>
-
-                <Text
-                  style={{ fontSize: 18, marginTop: 10, color: 'red' }}>
-                  {' '}[CAPTURE_IMAGE]{' '}
-                </Text>
-              </TouchableOpacity>
-
-            </View>
-          </Camera>
-        </View>
-      );
     }
-  }
-}
+    else {
+      return (
+        <View style = {{ flex: 1}}>
+        <Camera
+        style = {{flex: 1}}
+        ref={ref => { this.camera = ref; }}
+        type={this.state.type} >
+               
+        <View         style={{
+            flex: 1,
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+        }}>
+               <TouchableOpacity style={{
+                  flex: 0.1,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                }}
+               onPress={this.takePicture.bind(this)} >
+               <Text>Tsdfdfs</Text>
+               <Text>Take photdfsdfsdfso</Text>
+               <Text>Take phdfsdfdfdsfoto</Text>
+               <Text>Take photo</Text>
+           </TouchableOpacity>
+        </View>
+ 
+    </Camera>
+ 
+ </View>
+
+   
+    
+      );}
+              }}
